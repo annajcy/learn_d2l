@@ -1,11 +1,6 @@
 from .plot import (
     plot, 
-    set_axes,
     show_images
-)
-
-from .optimizer import (
-    SGD
 )
 
 from .regression import (
@@ -13,31 +8,31 @@ from .regression import (
     SyntheticRegressionDataTorch, 
     LinearRegressionScratch, 
     LinearRegressionTorch, 
-    LinearRegressionTorchL2
+    LinearRegressionTorchL2,
+    LinearRegressionTorchL2Optim
 )
 
 from .classification import (
     FashionMNIST,
-    SoftmaxClassifierScratch
+    SoftmaxClassifierScratch,
+    SoftmaxClassifierTorch
 )
 
 __all__ = [
     # Plot utilities
     'plot', 
-    'set_axes',
     'show_images',
-    
-    # Optimizer classes
-    'SGD',
 
-    # Data classes
+    # Regression
     'SyntheticRegressionDataScratch',
-    'SyntheticRegressionDataTorch', 
-    
-    # Model classes
+    'SyntheticRegressionDataTorch',
     'LinearRegressionScratch',
     'LinearRegressionTorch',
     'LinearRegressionTorchL2',
+    'LinearRegressionTorchL2Optim',
+    
+    # Classification
     'FashionMNIST',
-    'SoftmaxClassifierScratch'
+    'SoftmaxClassifierScratch',
+    'SoftmaxClassifierTorch'
 ]

@@ -49,8 +49,7 @@ def show_images(images: List[Union[np.ndarray, torch.Tensor]],
                 titles: List[str]=[], 
                 layout: Tuple[int, int]=(1, 1),
                 scale: float=2.0) -> None:
-    """Plot a list of images."""
-
+    
     num_rows, num_cols = layout
     figsize = (num_cols * scale, num_rows * scale)
     fig, axes = plt.subplots(num_rows, num_cols, figsize=figsize)
