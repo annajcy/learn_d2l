@@ -1,2 +1,2 @@
 from .plot import plot, set_axes
-from .linear_regression import SyntheticRegressionData
+from .linear_regression import SyntheticRegressionDataScratch, SyntheticRegressionDataTorch, LinearRegressionScratch, LinearRegressionTorch, LinearRegressionTorchL2

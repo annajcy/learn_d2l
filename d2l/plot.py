@@ -1,9 +1,7 @@
-import numpy as np
-import torch
 import matplotlib.pyplot as plt
 import matplotlib.axes as axes
-from matplotlib_inline import backend_inline
-from typing import Union, List, Tuple, Any
+import numpy as np
+from typing import List, Tuple, Optional
 
 
 def set_axes(axes: axes.Axes, 
@@ -26,7 +24,7 @@ def set_axes(axes: axes.Axes,
     
     
 def plot(axes: axes.Axes, 
-         data: Tuple[List[Any], List[Any]], 
+         data: Tuple[Optional[List[np.ndarray] | np.ndarray], List[np.ndarray]], 
          label: Tuple[str, str], 
          lim: Tuple[Tuple[float, float], Tuple[float, float]], 
          legend: List[str]=[],
@@ -34,12 +32,19 @@ def plot(axes: axes.Axes,
          fmts=('-', 'm--', 'g-.', 'r:'), 
          figsize: Tuple[float, float]=(3.5, 2.5)):
 
-    backend_inline.set_matplotlib_formats('svg')
     plt.rcParams['figure.figsize'] = figsize
     (X, Y) = data
+    
+    if isinstance(X, np.ndarray):
+        X_: List[np.ndarray] = [X for i in range(len(Y))]
+    elif X is None:
+        X_ = [np.arange(len(y)) for y in Y]
+    else:
+        X_ = X
+        
     xlabel, ylabel = label
     xlim, ylim = lim
     xscale, yscale = scale
-    for (x, y, fmt) in zip(X, Y, fmts):
+    for (x, y, fmt) in zip(X_, Y, fmts):
         axes.plot(x, y, fmt) if len(x) else axes.plot(y, fmt)
     set_axes(axes, label, lim, scale, legend)
