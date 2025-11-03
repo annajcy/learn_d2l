@@ -26,6 +26,8 @@ class FashionMNISTDataset(Dataset):
         ]
 
         self.train, self.test = self.generate(self.root, self.transform)
+        self.train_size = len(self.train)
+        self.test_size = len(self.test)
 
     @classmethod
     def generate(cls, root: str, transform: transforms.Compose) -> Tuple[torchvision.datasets.FashionMNIST, torchvision.datasets.FashionMNIST]:

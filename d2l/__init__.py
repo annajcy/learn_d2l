@@ -1,6 +1,10 @@
-from .base.trainer import Trainer
+from .base.trainer import (
+    TrainerType,
+    Trainer
+)
 
 from .base.evaluator import (
+    EvaluatorType,
     Evaluator, 
     ClassificationEvaluator
 )
@@ -10,6 +14,11 @@ from .base.plot import (
     plot_loss,
     plot_losses,
     show_images
+)
+
+from .base.function import (
+    softmax,
+    log_sum_exp 
 )
 
 from .base.utils import (
@@ -33,6 +42,7 @@ from .regression.dataset import (
 from .classification.model import (
     SoftmaxClassifier,
     SoftmaxClassifierTorch,
+    MLPClassifier,
     MLPClassifierTorch
 )
 

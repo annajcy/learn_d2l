@@ -1,8 +1,10 @@
-from typing import Any
+from typing import Any, TypeVar
 
 import torch
 
 from d2l.base.model import Model
+
+EvaluatorType = TypeVar('EvaluatorType', bound='Evaluator')
 
 class Evaluator:
     def __init__(self, model: Model) -> None:
