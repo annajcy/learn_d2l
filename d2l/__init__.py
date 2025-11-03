@@ -1,53 +1,39 @@
-from .plot import (
+from .base.trainer import Trainer
+
+from .base.evaluator import (
+    Evaluator, 
+    ClassificationEvaluator
+)
+
+from .base.plot import (
     plot, 
+    plot_loss,
+    plot_losses,
     show_images
 )
 
-from .regression import (
-    SyntheticRegressionDataScratch, 
-    SyntheticRegressionDataTorch, 
-    LinearRegressionScratch, 
-    LinearRegressionTorch, 
-    LinearRegressionTorchL2,
-    LinearRegressionTorchL2Optim
-)
-
-from .classification import (
-    FashionMNIST,
-    SoftmaxClassifierScratch,
-    SoftmaxClassifierTorch,
-    MLPClassifierTorch
-)
-
-from .utils import (
+from .base.utils import (
     cpu,
     gpu,
     num_gpus,
     try_gpu
 )
 
-__all__ = [
-    # Plot utilities
-    'plot', 
-    'show_images',
+from .regression.model import (
+    LinearRegression, 
+    LinearRegressionL2,
+    LinearRegressionTorch
+)
 
-    # Regression
-    'SyntheticRegressionDataScratch',
-    'SyntheticRegressionDataTorch',
-    'LinearRegressionScratch',
-    'LinearRegressionTorch',
-    'LinearRegressionTorchL2',
-    'LinearRegressionTorchL2Optim',
-    
-    # Classification
-    'FashionMNIST',
-    'SoftmaxClassifierScratch',
-    'SoftmaxClassifierTorch',
-    'MLPClassifierTorch',
-    
-    # Utils
-    'cpu',
-    'gpu',
-    'num_gpus',
-    'try_gpu'
-]
+from .regression.dataset import (
+    SyntheticRegressionDataset,
+    SyntheticRegressionDatasetTorch
+)
+
+from .classification.model import (
+    SoftmaxClassifier,
+    SoftmaxClassifierTorch,
+    MLPClassifierTorch
+)
+
+from .classification.dataset import FashionMNISTDataset

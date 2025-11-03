@@ -1,7 +1,7 @@
 from typing import List
 import torch
 
-class SGD:
+class SGDOptimizer:
     def __init__(self, params: List[torch.Tensor], lr: float) -> None:
         self.params: List[torch.Tensor] = params
         self.lr: float = lr

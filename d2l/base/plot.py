@@ -44,7 +44,36 @@ def plot(axes: axes.Axes,
     for (x, y, fmt) in zip(X_, Y, fmts):
         axes.plot(x, y, fmt) if len(x) else axes.plot(y, fmt)
     set_axes(axes, label, lim, scale, legend)
-    
+
+def plot_loss(axes: axes.Axes, 
+              all_epoch_losses: List[List[float]], 
+              label: str = 'loss') -> None:
+    num_epochs = len(all_epoch_losses)
+    if num_epochs == 0:
+        raise ValueError("Cannot plot loss without training history.")
+    num_batch = len(all_epoch_losses[0])
+    if num_batch == 0:
+        raise ValueError("Epoch history must include at least one batch.")
+    x = np.arange(0, num_epochs, 1 / num_batch)
+    y = np.array([[batch_loss for batch_loss in epoch_loss] for epoch_loss in all_epoch_losses]).flatten()
+    plot(axes, (x, [y]), ('epoch', 'loss'), ((0, num_epochs), (0, float(np.max(y)))), legend=[label])
+
+def plot_losses(axes: axes.Axes,
+                all_epoch_losses_list: List[List[List[float]]], 
+                labels: List[str]) -> None:
+    num_epochs = len(all_epoch_losses_list[0])
+    if num_epochs == 0:
+        raise ValueError("Cannot plot loss without training history.")
+    num_batch = len(all_epoch_losses_list[0][0])
+    if num_batch == 0:
+        raise ValueError("Epoch history must include at least one batch.")
+    x = np.arange(0, num_epochs, 1 / num_batch)
+    ys: List[np.ndarray] = []
+    for all_epoch_losses in all_epoch_losses_list:
+        y = np.array([[batch_loss for batch_loss in epoch_loss] for epoch_loss in all_epoch_losses]).flatten()
+        ys.append(y)
+    plot(axes, (x, ys), ('epoch', 'loss'), ((0, num_epochs), (0, float(np.max(ys)))), legend=labels)
+
 def show_images(images: List[Union[np.ndarray, torch.Tensor]], 
                 titles: List[str]=[], 
                 layout: Tuple[int, int]=(1, 1),
