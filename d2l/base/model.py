@@ -4,7 +4,7 @@ from typing import Iterable
 
 class Model(ABC):
     def __init__(self) -> None:
-        self.is_training: bool = True
+        self.is_training: bool = False
     
     def train_mode(self) -> None:
         self.is_training = True
@@ -53,3 +53,11 @@ class ModelTorch(Model):
 
     def to_device(self, device: torch.device) -> None:
         self.net.to(device)
+        
+    @abstractmethod
+    def loss(self, y_hat: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
+        pass
+    
+    @abstractmethod
+    def predict(self, X: torch.Tensor) -> torch.Tensor:
+        pass

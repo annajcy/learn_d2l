@@ -1,5 +1,6 @@
 from typing import List, Tuple
 import torch
+import torch.nn as nn
 from d2l.base.model import Model, ModelTorch
 import d2l.base.function as d2l_F
 
@@ -197,3 +198,54 @@ class MLPClassifierDropoutTorch(MLPClassifierTorch):
                 torch.nn.init.normal_(layer.weight, 0, 0.01, generator=self.rng)
                 torch.nn.init.zeros_(layer.bias)
         return net
+    
+class LeNetClassifierTorch(ModelTorch):
+    def __init__(self, 
+                num_features: Tuple[int, ...],
+                num_outputs: int,
+                rng: torch.Generator = torch.Generator().manual_seed(42)) -> None:
+        self.num_outputs = num_outputs
+        self.num_features = num_features
+        self.rng = rng
+        
+        super().__init__(self.make_net())
+
+    def make_net(self) -> torch.nn.Module:
+        net = torch.nn.Sequential(
+            nn.LazyConv2d(6, kernel_size=5, padding=2),
+            nn.Sigmoid(),
+            nn.AvgPool2d(kernel_size=2, stride=2),
+            nn.LazyConv2d(16, kernel_size=5),
+            nn.Sigmoid(),
+            nn.AvgPool2d(kernel_size=2, stride=2),
+            nn.Flatten(),
+            nn.LazyLinear(120),
+            nn.Sigmoid(),
+            nn.LazyLinear(84),
+            nn.Sigmoid(),
+            nn.LazyLinear(self.num_outputs)
+        )
+        return net
+    
+    def init(self, X_shape: Tuple[int, ...]) -> None:
+        X = torch.randn(*X_shape, generator=self.rng)
+        self.forward(X)
+        assert isinstance(self.net, torch.nn.Sequential), "init only supports Sequential models."
+        for layer in self.net:
+            if isinstance(layer, torch.nn.Linear) or isinstance(layer, torch.nn.Conv2d):
+                nn.init.xavier_uniform_(layer.weight, gain=1, generator=self.rng)
+
+    def layer_summary(self, X_shape: Tuple[int, ...]) -> None:
+        X = torch.randn(*X_shape, generator=self.rng)
+        assert isinstance(self.net, torch.nn.Sequential), "layer_summary only supports Sequential models."
+        for layer in self.net:
+            print(f'{layer.__class__.__name__:>20}  input shape: {X.shape}')
+            X = layer(X)
+            print(f'{layer.__class__.__name__:>20}  output shape: {X.shape}')
+        print(f'{"Total":>20}  output shape: {X.shape}')
+        
+    def predict(self, X: torch.Tensor) -> torch.Tensor:
+        return self.forward(X).argmax(dim=1)
+    
+    def loss(self, y_hat: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
+        return torch.nn.functional.cross_entropy(y_hat, y, reduction='mean')

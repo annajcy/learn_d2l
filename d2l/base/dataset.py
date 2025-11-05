@@ -13,6 +13,6 @@ class Dataset(ABC):
     def get_test_dataloader(self, batch_size: int) -> Any:
         pass
 
-    def get_train_dataloader_epochs(self, batch_size: int, epochs: int) -> Generator[Any, None, None]:
-        for _ in range(epochs):
+    def get_train_dataloader_epochs(self, batch_size: int, num_epochs: int) -> Generator[Any, None, None]:
+        for _ in range(num_epochs):
             yield self.get_train_dataloader(batch_size)
