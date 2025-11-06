@@ -46,7 +46,17 @@ from .classification.model import (
     MLPClassifierTorch,
     MLPClassifierDropout,
     MLPClassifierDropoutTorch,
-    LeNetClassifierTorch
+    ConvolutionalClassifierTorch,
+    LeNetClassifierTorch,
+    AlexNetClassifierTorch,
+    VGGClassifier,
+    NiNClassifier,
+    GoogLeNetClassifier, 
+    BatchNorm1d, 
+    BatchNorm2d,
+    LayerNorm,
+    LeNetBNClassifierTorch,
+    LeNetBNClassifier
 )
 
 from .classification.dataset import FashionMNISTDataset

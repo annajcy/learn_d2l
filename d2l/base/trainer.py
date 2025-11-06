@@ -1,5 +1,7 @@
 from typing import Any, Callable, Generator, List, Optional, TypeVar
+
 from d2l.base.model import Model
+from tqdm.auto import tqdm # type: ignore
 
 TrainerType = TypeVar('TrainerType', bound='Trainer')
 
@@ -17,7 +19,7 @@ class Trainer:
     def _train_single_epoch(self, train_data_loader: Any) -> Any:
         self.model.train_mode()
         batch_losses: List[float] = []
-        for X, y in train_data_loader:
+        for X, y in tqdm(train_data_loader, desc="Batch", leave=True):
             y_hat = self.model.forward(X)
             loss = self.model.loss(y_hat, y)
             loss.backward()
@@ -28,7 +30,7 @@ class Trainer:
 
     def train(self, train_data_loaders: Generator[Any, None, None]) -> Any:
         epoch_losses: List[List[float]] = []
-        for epoch_id, train_data_loader in enumerate(train_data_loaders):
+        for epoch_id, train_data_loader in tqdm(list(enumerate(train_data_loaders)), desc="Epochs", leave=True):
             batch_losses = self._train_single_epoch(train_data_loader)
             epoch_losses.append(batch_losses)
             self.on_train_epoch_end(self.model, epoch_id, batch_losses)

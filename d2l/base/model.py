@@ -15,6 +15,14 @@ class Model(ABC):
     def to_device(self, device: torch.device) -> None:
         for param in self.parameters():
             param.to(device)
+            
+    def save(self, path: str) -> None:
+        print("Warning: save method not implemented.")
+        pass
+
+    def load(self, path: str) -> None:
+        print("Warning: load method not implemented.")
+        pass
 
     @abstractmethod
     def parameters(self) -> Iterable[torch.Tensor]:
@@ -53,6 +61,12 @@ class ModelTorch(Model):
 
     def to_device(self, device: torch.device) -> None:
         self.net.to(device)
+
+    def save(self, path: str) -> None:
+        torch.save(self.net.state_dict(), path)
+        
+    def load(self, path: str) -> None:
+        self.net.load_state_dict(torch.load(path))
         
     @abstractmethod
     def loss(self, y_hat: torch.Tensor, y: torch.Tensor) -> torch.Tensor:

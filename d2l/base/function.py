@@ -79,3 +79,56 @@ def avg_pool2d(X: torch.Tensor, pool_size: Tuple[int, int]) -> torch.Tensor:
         for j in range(Y.shape[1]):
             Y[i, j] = X[i: i + p_h, j: j + p_w].mean()
     return Y
+
+def batch_norm_1d(
+        X: torch.Tensor, 
+        gamma: torch.Tensor,
+        beta: torch.Tensor,
+        moving_mean: torch.Tensor,
+        moving_var: torch.Tensor,
+        momentum: float,
+        eps: float = 1e-5,
+        is_training: bool = True) -> torch.Tensor:
+    if is_training:
+        batch_mean = X.mean(dim=0, keepdim=True)
+        batch_var = X.var(dim=0, unbiased=False, keepdim=True)
+        X_hat = (X - batch_mean) / torch.sqrt(batch_var + eps)
+        with torch.no_grad():
+            moving_mean.mul_(momentum).add_((1.0 - momentum) * batch_mean)
+            moving_var.mul_(momentum).add_((1.0 - momentum) * batch_var)
+    else:
+        X_hat = (X - moving_mean) / torch.sqrt(moving_var + eps)
+    Y = gamma * X_hat + beta
+    return Y
+
+def batch_norm_2d(
+        X: torch.Tensor, 
+        gamma: torch.Tensor,
+        beta: torch.Tensor,
+        moving_mean: torch.Tensor,
+        moving_var: torch.Tensor,
+        momentum: float,
+        eps: float = 1e-5,
+        is_training: bool = True) -> torch.Tensor:
+    if is_training:
+        batch_mean = X.mean(dim=(0, 2, 3), keepdim=True)
+        batch_var = X.var(dim=(0, 2, 3), keepdim=True, unbiased=False)
+        X_hat = (X - batch_mean) / torch.sqrt(batch_var + eps)
+        with torch.no_grad():
+            moving_mean.mul_(momentum).add_((1.0 - momentum) * batch_mean)
+            moving_var.mul_(momentum).add_((1.0 - momentum) * batch_var)
+    else:
+        X_hat = (X - moving_mean) / torch.sqrt(moving_var + eps)
+    Y = gamma * X_hat + beta
+    return Y
+
+def layer_norm(
+        X: torch.Tensor, 
+        gamma: torch.Tensor,
+        beta: torch.Tensor,
+        eps: float = 1e-5) -> torch.Tensor:
+    mean = X.mean(dim=1, keepdim=True)
+    var = X.var(dim=1, keepdim=True, unbiased=False)
+    X_hat = (X - mean) / torch.sqrt(var + eps)
+    Y = gamma * X_hat + beta
+    return Y
