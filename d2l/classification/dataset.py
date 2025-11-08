@@ -3,6 +3,7 @@ from torch.utils.data import DataLoader
 import torchvision # type: ignore
 from torchvision import transforms
 from d2l.base.dataset import Dataset
+import torch
 
 class FashionMNISTDataset(Dataset):
     def __init__(self, 
@@ -43,11 +44,11 @@ class FashionMNISTDataset(Dataset):
         return [self.text_labels[int(i)] for i in labels]
     
     def get_train_dataloader(self, batch_size: int=64) -> DataLoader:
-        return DataLoader(
+        return torch.utils.data.DataLoader(
             self.train, batch_size=batch_size, shuffle=True
         )
 
     def get_test_dataloader(self, batch_size: int=64) -> DataLoader:
-        return DataLoader(
+        return torch.utils.data.DataLoader(
             self.test, batch_size=batch_size, shuffle=False
         )

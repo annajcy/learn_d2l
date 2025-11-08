@@ -1,6 +1,5 @@
 from typing import List, Optional, Any, Dict
 import torch
-from torch.utils.data import DataLoader
 from d2l.base.dataset import Dataset
 
 import re
@@ -82,11 +81,11 @@ class TimeMachineDataset(Dataset):
     
     def get_train_dataloader(self, batch_size: int) -> Any:
         dataset = torch.utils.data.TensorDataset(self.X_train, self.Y_train)
-        return DataLoader(dataset, batch_size=batch_size, shuffle=True)
+        return torch.utils.data.DataLoader(dataset, batch_size=batch_size, shuffle=True)
         
     def get_test_dataloader(self, batch_size: int) -> Any:
         dataset = torch.utils.data.TensorDataset(self.X_test, self.Y_test)
-        return DataLoader(dataset, batch_size=batch_size, shuffle=False)
+        return torch.utils.data.DataLoader(dataset, batch_size=batch_size, shuffle=False)
 
     
     
