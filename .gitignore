@@ -11,3 +11,4 @@ wheels/
 .mypy_cache/
 
 .DS_Store
+exam/data/
